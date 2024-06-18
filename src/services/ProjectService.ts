@@ -68,4 +68,12 @@ export class ProjectService {
             return false;
         }
     }
+
+    public async setCurrentProject(project: string): Promise<void> {
+        this.apiCaller.setCurrentProject(project)
+    }
+
+    public async getProjectById(): Promise<string | null> {
+        return this.apiCaller.getProjectById();
+    }
 }

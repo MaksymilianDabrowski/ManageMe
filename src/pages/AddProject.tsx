@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { LocalStorageRepository } from '../api/ApiService'
 import { ProjectService } from '../services/ProjectService'
 import { Project } from '../models/ProjectModel'
+import { Link } from 'react-router-dom'
 
 export default function AddProject() {
     const [projects, setProjects] = useState<Project[]>([])
@@ -97,6 +98,11 @@ export default function AddProject() {
                                 Zatwierdź
                             </button>
                         </div>
+                        <Link
+                            to="/"
+                            className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mb-16"
+                        >Powrót
+                        </Link>
                     </div>
                 </div>
             </form>
