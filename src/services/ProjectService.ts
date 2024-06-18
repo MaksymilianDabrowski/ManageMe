@@ -1,4 +1,4 @@
-import { LocalStorageRepository, ApiService } from "../api/ApiService";
+import { ApiService } from "../api/ApiService";
 import { Project } from "../models/ProjectModel";
 
 export class ProjectService {
@@ -9,7 +9,7 @@ export class ProjectService {
         this.apiCaller = apiCaller;
     }
 
-    public async create(name: string, desc: string): Promise<void> {
+    public async createProject(name: string, desc: string): Promise<void> {
         try {
             const projects = await this.apiCaller.getProject();
             const project: Project = {
@@ -25,7 +25,7 @@ export class ProjectService {
         }
     }
 
-    public async read(): Promise<Project[]> {
+    public async readProjects(): Promise<Project[]> {
         try {
             return await this.apiCaller.getProject();
         }
@@ -35,7 +35,7 @@ export class ProjectService {
         }
     }
 
-    public async update(id: string, updName: string, updDesc: string): Promise<boolean> {
+    public async updateProject(id: string, updName: string, updDesc: string): Promise<boolean> {
         try {
             const projects = await this.apiCaller.getProject();
             const index = projects.findIndex((project) => project.id === id);
@@ -53,7 +53,7 @@ export class ProjectService {
         }
     }
 
-    public async delete(id: string): Promise<boolean> {
+    public async deleteProject(id: string): Promise<boolean> {
         try {
             const projects = await this.apiCaller.getProject();
             const updatedProjects = projects.filter((project) => project.id !== id);

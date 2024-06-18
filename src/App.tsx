@@ -1,5 +1,6 @@
 import './App.css'
-import { BrowserRouter, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import AddProject from './pages/AddProject'
 
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path='add-project' element={<AddProject/>} />
         </Routes>
       </BrowserRouter>
     </>
