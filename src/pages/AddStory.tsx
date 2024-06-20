@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Story } from "../models/StoryModel";
 import { ProjectService } from "../services/ProjectService";
 import { LocalStorageRepository } from "../api/ApiService";
@@ -91,66 +91,118 @@ export default function AddStory() {
   };
 
   return (
-    <div>
-      <h2>Project: {projectName}</h2>
-      <form onSubmit={handleCreateOrUpdateStory}>
-        <label>
-          Story Name:
-          <input
-            type="text"
-            value={storyName}
-            onChange={(e) => setStoryName(e.target.value)}
-          />
-        </label>
-        <label>
-          Description:
-          <textarea
-            value={storyDesc}
-            onChange={(e) => setStoryDesc(e.target.value)}
-          />
-        </label>
-        <label>
-          Priority:
-          <select
-            value={storyPriority}
-            onChange={(e) => setStoryPriority(e.target.value as "Low" | "Medium" | "High")}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </label>
-        <label>
-          Status:
-          <select
-            value={storyStatus}
-            onChange={(e) => setStoryStatus(e.target.value as "Todo" | "Doing" | "Done")}
-          >
-            <option value="Todo">Todo</option>
-            <option value="Doing">Doing</option>
-            <option value="Done">Done</option>
-          </select>
-        </label>
-        <button type="submit">{editStoryId ? "Update Story" : "Add Story"}</button>
-      </form>
+    <>
+      <div className="w-full m-auto justify-center items-center py-12">
+        <form onSubmit={handleCreateOrUpdateStory}>
+          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">
+            Wybrany projekt: {projectName}
+          </h1>
+          <div className="lg:w-1/2 md:w-2/3 mx-auto">
+            <div className="flex flex-wrap m-2">
+              <div className="p-2 w-full">
+                <div className="relative">
+                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                    Nazwa story
+                  </label>
+                  <input
+                    name="Name"
+                    autoComplete="off"
+                    value={storyName}
+                    onChange={(e) => setStoryName(e.target.value)}
+                    required
+                    className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  />
+                </div>
+              </div>
+              <div className="p-2 w-full">
+                <div className="relative">
+                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                    Opis story
+                  </label>
+                  <textarea
+                    name="Desc"
+                    autoComplete="off"
+                    value={storyDesc}
+                    onChange={(e) => setStoryDesc(e.target.value)}
+                    required
+                    className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                  />
+                </div>
+              </div>
+              <div className="p-2 w-full">
+                <div className="relative">
+                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                    Priorytet
+                  </label>
+                  <select
+                    value={storyPriority}
+                    onChange={(e) => setStoryStatus(e.target.value as "Todo" | "Doing" | "Done")}
+                    className="w-full text-center bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
 
-      <h2>Stories</h2>
-      <ul>
-        {stories.map((story) => (
-          <li key={story.id}>
-            <div>
-              <strong>{story.name}</strong> - {story.description}
+                  >
+                    <option value="Low" className="text-center">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+              </div>
+              <div className="p-2 w-full">
+                <div className="relative">
+                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                    Status
+                  </label>
+                  <select
+                    value={storyStatus}
+                    onChange={(e) => setStoryStatus(e.target.value as "Todo" | "Doing" | "Done")}
+                    className="w-full text-center bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+
+                  >
+                    <option value="Todo">Todo</option>
+                    <option value="Doing">Doing</option>
+                    <option value="Done">Done</option>
+                  </select>
+                </div>
+              </div>
+              <div className="p-10 m-8 w-full">
+                <button
+                  type='submit'
+                  className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg "
+                >
+                  Zatwierdź
+                </button>
+              </div>
+              <Link
+                to="/"
+                className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mb-16"
+              >Powrót
+              </Link>
             </div>
-            <div>Priority: {story.priority}</div>
-            <div>Status: {story.status}</div>
-            <div>
-              <button onClick={() => handleEditStory(story.id)}>Edit</button>
-              <button onClick={() => handleDeleteStory(story.id)}>Delete</button>
-              <button onClick={() => handleOpenStory(story.id)}>Open</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+          </div>
+        </form>
+        <ul>
+          {stories.map((story) => (
+            <li key={story.id}
+              className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6">
+              {story.name} - {story.description} - {storyPriority} - {storyStatus} {/* zaimplemenotwać sortowanie przez status */}
+              <button
+                onClick={() => handleOpenStory(story.id)} // open 
+                className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                Otwórz story
+              </button>
+              <button
+                onClick={() => handleEditStory(story.id)}
+                className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                Edytuj story
+              </button>
+              <button
+                onClick={() => handleDeleteStory(story.id)}
+                className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                Usuń story
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
