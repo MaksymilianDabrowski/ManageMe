@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { LocalStorageRepository } from '../api/ApiService'
 import { ProjectService } from '../services/ProjectService'
 import { Project } from '../models/ProjectModel'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function AddProject() {
     const [projects, setProjects] = useState<Project[]>([])
     const [projectName, setProjectName] = useState("")
     const [projectDesc, setProjectDesc] = useState("")
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         refreshProjectList();
@@ -15,7 +17,12 @@ export default function AddProject() {
 
     const projectService = new ProjectService(new LocalStorageRepository())
 
-    const handleAddProject = async (event: React.FormEvent) => {
+    const refreshProjectList = async () => {
+        const projects = await projectService.readProjects();
+        setProjects(projects);
+    };
+
+    const handleCreateProject = async (event: React.FormEvent) => {
         event.preventDefault();
 
         if (projectName && projectDesc) {
@@ -26,17 +33,14 @@ export default function AddProject() {
         }
     }
 
-    const refreshProjectList = async () => {
-        const projects = await projectService.readProjects();
-        setProjects(projects);
-    };
+    // update dla edycji projektu
 
     const handleEditProject = async (id: string) => {
-        const newName = prompt('Nowa nazwa projektu:');
-        const newDescription = prompt('Nowy opis projektu:');
+        const updName = prompt('Nowa nazwa projektu:');
+        const updDescription = prompt('Nowy opis projektu:');
 
-        if (newName !== null && newDescription !== null) {
-            const updated = await projectService.updateProject(id, newName, newDescription);
+        if (updName !== null && updDescription !== null) {
+            const updated = await projectService.updateProject(id, updName, updDescription);
             if (updated) {
                 refreshProjectList();
             } else {
@@ -54,9 +58,14 @@ export default function AddProject() {
         }
     };
 
+    const handleOpenProject = (id: string) => {
+        projectService.setCurrentProject(id);
+        navigate(`/projects/${id}/story`);
+    };
+
     return (
         <div className="w-full m-auto justify-center items-center py-12">
-            <form onSubmit={handleAddProject}>
+            <form onSubmit={handleCreateProject}>
                 <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">Dodaj projekt</h1>
                 <div className="lg:w-1/2 md:w-2/3 mx-auto">
                     <div className="flex flex-wrap m-2">
@@ -112,7 +121,7 @@ export default function AddProject() {
                         className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6">
                         {project.name} - {project.desc}
                         <button
-                            // onClick={() => handleEditProject(project.id)} // open 
+                            onClick={() => handleOpenProject(project.id)} // open 
                             className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
                             Otwórz projekt
                         </button>
