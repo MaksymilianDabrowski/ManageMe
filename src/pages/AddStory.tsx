@@ -94,9 +94,6 @@ export default function AddStory() {
     <>
       <div className="w-full m-auto justify-center items-center py-12">
         <form onSubmit={handleCreateOrUpdateStory}>
-          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">
-            Wybrany projekt: {projectName}
-          </h1>
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap m-2">
               <div className="p-2 w-full">
@@ -172,7 +169,7 @@ export default function AddStory() {
                 </button>
               </div>
               <Link
-                to="/"
+                to="/projects"
                 className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mb-16"
               >Powrót
               </Link>
@@ -180,6 +177,9 @@ export default function AddStory() {
           </div>
         </form>
         <ul>
+          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">
+            Wybrany projekt: {projectName}
+          </h1>
           {stories.map((story) => (
             <li key={story.id}
               className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6">
