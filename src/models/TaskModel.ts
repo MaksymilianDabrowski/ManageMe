@@ -1,14 +1,14 @@
-import { Story } from "./StoryModel";
 import { User } from "./UserModel";
 
 export interface Task {
+    id: string,
     name: string,
-    desc: string,
+    description: string,
     priority: "Low" | "Medium" | "High",
-    story: Story,
-    estTime: Date, // ??? 
+    storyId: string,
+    estTime: number,
     status: "Todo" | "Doing" | "Done",
-    buildTime: Date,
+    // buildTime: Date,
     startTime?: Date,
     endTime?: Date,
     user?: User
