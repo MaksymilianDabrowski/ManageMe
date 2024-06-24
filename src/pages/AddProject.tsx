@@ -33,8 +33,6 @@ export default function AddProject() {
         }
     }
 
-    // update dla edycji projektu
-
     const handleEditProject = async (id: string) => {
         const updName = prompt('Nowa nazwa projektu:');
         const updDescription = prompt('Nowy opis projektu:');
@@ -66,12 +64,12 @@ export default function AddProject() {
     return (
         <div className="w-full m-auto justify-center items-center py-12">
             <form onSubmit={handleCreateProject}>
-                <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">Dodaj projekt</h1>
+                <div className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">Dodaj projekt</div>
                 <div className="lg:w-1/2 md:w-2/3 mx-auto">
                     <div className="flex flex-wrap m-2">
                         <div className="p-2 w-full">
                             <div className="relative">
-                                <label className="leading-7 text-sm text-[#3d3d3d]">
+                                <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
                                     Nazwa projektu
                                 </label>
                                 <input
@@ -86,7 +84,7 @@ export default function AddProject() {
                         </div>
                         <div className="p-2 w-full">
                             <div className="relative">
-                                <label className="leading-7 text-sm text-[#3d3d3d]">
+                                <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
                                     Opis projektu
                                 </label>
                                 <textarea
@@ -118,7 +116,7 @@ export default function AddProject() {
             <ul>
                 {projects.map((project) => (
                     <li key={project.id}
-                        className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6">
+                        className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:border-[#2c2c2c] dark:text-white">
                         {project.name} - {project.desc}
                         <button
                             onClick={() => handleOpenProject(project.id)} // open 

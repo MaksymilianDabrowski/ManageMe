@@ -94,13 +94,13 @@ export default function AddStory() {
     <>
       <div className="w-full m-auto justify-center items-center py-12">
         <form onSubmit={handleCreateOrUpdateStory}>
-          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">Add Story</h1>
+          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">Dodaj Story</h1>
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap m-2">
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
-                    Story Name
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
+                    Nazwa story
                   </label>
                   <input
                     name="Name"
@@ -114,8 +114,8 @@ export default function AddStory() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
-                    Story Description
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
+                    Opis story
                   </label>
                   <textarea
                     name="Desc"
@@ -129,8 +129,8 @@ export default function AddStory() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
-                    Priority
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
+                    Priorytet
                   </label>
                   <select
                     value={storyPriority}
@@ -145,7 +145,7 @@ export default function AddStory() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
                     Status
                   </label>
                   <select
@@ -164,39 +164,39 @@ export default function AddStory() {
                   type='submit'
                   className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg "
                 >
-                  Submit
+                  Zatwierdź
                 </button>
               </div>
               <Link
                 to="/projects"
                 className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mb-16"
-              >powrót
+              >Powrót
               </Link>
             </div>
           </div>
         </form>
         <ul>
-          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">
-            Selected Project: {projectName}
+          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">
+            Wybrany projekt: {projectName}
           </h1>
           {stories.map((story) => (
             <li key={story.id}
-              className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6">
+              className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
               {story.name} - {story.description} - {story.priority} - {story.status}
               <button
                 onClick={() => handleOpenStory(story.id)}
                 className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-                Open Story
+                Otwórz 
               </button>
               <button
                 onClick={() => handleEditStory(story.id)}
                 className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-                Edit Story
+                Edytuj 
               </button>
               <button
                 onClick={() => handleDeleteStory(story.id)}
                 className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
-                Delete Story
+                Usuń 
               </button>
             </li>
           ))}

@@ -1,12 +1,13 @@
 // Navbar dla HomePage
 
+import { ModeToggle } from "./ModeToggle";
+
 export default function Navbar() { // smth
     return (
         <>
-            <div className='text-4xl text-center pb-8'>
-                lightmode
+            <div className=" justify-items-center mb-12">
+                <ModeToggle />
             </div>
-            
         </>
     )
 }

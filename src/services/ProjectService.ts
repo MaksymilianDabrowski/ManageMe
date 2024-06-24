@@ -197,7 +197,7 @@ export class ProjectService {
 
     public getStoryByName(storyId: string): string {
         try {
-            const stories = this.readProjects();
+            const stories = this.readStories();
             const story = stories.find((story) => story.id === storyId);
             return story ? story.name : "Unknown";
         } catch (error) {

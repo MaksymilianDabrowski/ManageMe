@@ -60,7 +60,7 @@ export default function AddTask() {
     setTaskDesc("");
     setTaskPriority("Medium");
     setTaskStatus("Todo");
-    setEstTime(1); 
+    setEstTime(1);
     setEditTaskId(null);
   };
 
@@ -91,13 +91,13 @@ export default function AddTask() {
     <>
       <div className="w-full m-auto justify-center items-center py-12">
         <form onSubmit={handleCreateOrUpdateTask}>
-          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">Dodaj task</h1>
+          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">Dodaj task</h1>
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap m-2">
               <div className="p-2 w-full">
                 <div className="relative">
                   <label className="leading-7 text-sm text-[#3d3d3d]">
-                    Nazwa task
+                    Nazwa Taska
                   </label>
                   <input
                     name="Name"
@@ -111,8 +111,8 @@ export default function AddTask() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
-                    Opis task
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
+                    Opis Taska
                   </label>
                   <textarea
                     name="Desc"
@@ -126,7 +126,7 @@ export default function AddTask() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
                     Priorytet
                   </label>
                   <select
@@ -142,7 +142,7 @@ export default function AddTask() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
                     Status
                   </label>
                   <select
@@ -158,8 +158,8 @@ export default function AddTask() {
               </div>
               <div className="p-2 w-full">
                 <div className="relative">
-                  <label className="leading-7 text-sm text-[#3d3d3d]">
-                    EstTime
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
+                    Przewidziany czas wykonania
                   </label>
                   <input
                     name="EstTime"
@@ -191,12 +191,12 @@ export default function AddTask() {
         </form>
       </div>
       <ul>
-        <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8">
-          Wybrany projekt: {storyName}
+        <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">
+          Wybrane story: {storyName}
         </h1>
         {tasks.map((task) => (
           <li key={task.id}
-            className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6">
+            className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
             {task.name} - {task.description} - {task.priority} - {task.status} - {task.estTime}
             <button
               onClick={() => handleEditTask(task.id)}
