@@ -4,6 +4,7 @@ import { Story } from "../models/StoryModel";
 import { ProjectService } from "../services/ProjectService";
 import { LocalStorageRepository } from "../api/ApiService";
 import { UserService } from "../services/UserService";
+import addNotification from "react-push-notification";
 
 export default function AddStory() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -40,7 +41,9 @@ export default function AddStory() {
           storyPriority,
           storyStatus
         );
-        console.log("Story updated: ", updated);
+        if (updated) {
+          handleEditStoryNotification();
+        }
       } else {
         await projectService.createStory(
           storyName,
@@ -49,15 +52,21 @@ export default function AddStory() {
           storyStatus,
           currentUser?.id || ""
         );
+        handleAddStoryNotification();
       }
-      setStoryName("");
-      setStoryDesc("");
-      setStoryPriority("Medium");
-      setStoryStatus("Todo");
-      setEditStoryId(null);
-      refreshStoryList();
+      resetForm();
     }
   };
+
+
+  const resetForm = () => {
+    setStoryName("");
+    setStoryDesc("");
+    setStoryPriority("Medium");
+    setStoryStatus("Todo");
+    setEditStoryId(null);
+    refreshStoryList();
+  }
 
   const handleEditStory = async (id: string) => {
     const story = stories.find((story) => story.id === id);
@@ -74,6 +83,7 @@ export default function AddStory() {
     const deleted = await projectService.deleteStory(id);
     if (deleted) {
       refreshStoryList();
+      handleDeleteStoryNotification();
     } else {
       alert("Error");
     }
@@ -88,6 +98,27 @@ export default function AddStory() {
     const stories = projectService.readStories();
     setStories(stories);
     console.log("Refreshed stories: ", stories);
+  };
+
+  const handleAddStoryNotification = () => {
+    addNotification({
+      title: 'Utworzenie story',
+      message: 'Poprawnie utworzono story!',
+    });
+  };
+
+  const handleEditStoryNotification = () => {
+    addNotification({
+      title: "Edycja story",
+      message: "Edycja przebiegła pomyślnie!"
+    });
+  };
+
+  const handleDeleteStoryNotification = () => {
+    addNotification({
+      title: "Usunięcie story",
+      message: "Poprawnie usunięto story!"
+    });
   };
 
   return (
@@ -170,7 +201,8 @@ export default function AddStory() {
               <Link
                 to="/projects"
                 className="flex mx-auto text-white bg-[#2c2c2c] border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mb-16"
-              >Powrót
+              >
+                Powrót
               </Link>
             </div>
           </div>
@@ -186,17 +218,17 @@ export default function AddStory() {
               <button
                 onClick={() => handleOpenStory(story.id)}
                 className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-                Otwórz 
+                Otwórz
               </button>
               <button
                 onClick={() => handleEditStory(story.id)}
                 className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-                Edytuj 
+                Edytuj
               </button>
               <button
                 onClick={() => handleDeleteStory(story.id)}
                 className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
-                Usuń 
+                Usuń
               </button>
             </li>
           ))}

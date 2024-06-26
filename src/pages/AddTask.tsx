@@ -4,6 +4,7 @@ import { Task } from '../models/TaskModel';
 import { ProjectService } from '../services/ProjectService';
 import { LocalStorageRepository } from '../api/ApiService';
 import { mockUsers } from '@/models/UserModel';
+import addNotification from 'react-push-notification';
 
 export default function AddTask() {
   const { storyId } = useParams<{ storyId: string }>();
@@ -22,7 +23,7 @@ export default function AddTask() {
   useEffect(() => {
     if (storyId) {
       (async () => {
-        await projectService.setCurrentStory(storyId);
+        projectService.setCurrentStory(storyId);
         await refreshTasks();
         const name = projectService.getStoryByName(storyId);
         setStoryName(name);
@@ -44,6 +45,9 @@ export default function AddTask() {
           mockUser
         );
         console.log("Task updated:", update);
+        if (update) {
+          handleEditTaskNotification();
+        }
       } else {
         await projectService.createTask(
           taskName,
@@ -56,6 +60,7 @@ export default function AddTask() {
       }
       resetForm();
       refreshTasks();
+      handleAddTaskNotification();
     }
   };
 
@@ -91,6 +96,7 @@ export default function AddTask() {
   const handleDeleteTask = async (taskId: string) => {
     await projectService.deleteTask(taskId);
     refreshTasks();
+    handleDeleteTaskNotification();
   };
 
   const getMockUserName = (mockUserId: string) => {
@@ -100,6 +106,27 @@ export default function AddTask() {
     }
     return "No mock user here"
   }
+
+  const handleAddTaskNotification = () => {
+    addNotification({
+      title: 'Utworzenie taska',
+      message: 'Poprawnie utworzono taska!',
+    });
+  };
+
+  const handleEditTaskNotification = () => {
+    addNotification({
+      title: "Edycja taska",
+      message: "Edycja przebiegła pomyślnie!"
+    });
+  };
+
+  const handleDeleteTaskNotification = () => {
+    addNotification({
+      title: "Usunięcie taska",
+      message: "Poprawnie usunięto taska!"
+    });
+  };
 
   return (
     <>

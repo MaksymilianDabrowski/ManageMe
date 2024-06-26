@@ -8,6 +8,7 @@ import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
 import Registerpage from './pages/Registerpage'
 import { ThemeProvider } from './components/ThemeProvider'
+import { Notifications } from 'react-push-notification'
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   return (
     <>
       <ThemeProvider>
+        <Notifications /> {/* ?? */}
         <BrowserRouter>
           <Navbar />
           <Routes>
@@ -23,7 +25,7 @@ function App() {
             <Route path='/projects/:projectId/story' element={<AddStory />} />
             <Route path='/story/:storyId/task' element={<AddTask />} />
             <Route path='/login' element={<LoginPage />} />
-            <Route path='/login' element={<Registerpage />} />
+            <Route path='/register' element={<Registerpage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

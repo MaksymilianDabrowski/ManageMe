@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { LocalStorageRepository } from '../api/ApiService'
-import { ProjectService } from '../services/ProjectService'
-import { Project } from '../models/ProjectModel'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { LocalStorageRepository } from '../api/ApiService';
+import { ProjectService } from '../services/ProjectService';
+import { Project } from '../models/ProjectModel';
+import { Link, useNavigate } from 'react-router-dom';
+import addNotification from 'react-push-notification';
 
 export default function AddProject() {
-    const [projects, setProjects] = useState<Project[]>([])
-    const [projectName, setProjectName] = useState("")
-    const [projectDesc, setProjectDesc] = useState("")
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [projectName, setProjectName] = useState("");
+    const [projectDesc, setProjectDesc] = useState("");
+    const [editProjectId, setEditProjectId] = useState<string | null>(null)
 
     const navigate = useNavigate();
 
@@ -15,35 +17,42 @@ export default function AddProject() {
         refreshProjectList();
     }, []);
 
-    const projectService = new ProjectService(new LocalStorageRepository())
+    const projectService = new ProjectService(new LocalStorageRepository());
 
     const refreshProjectList = async () => {
         const projects = await projectService.readProjects();
         setProjects(projects);
     };
 
-    const handleCreateProject = async (event: React.FormEvent) => {
+    //edited
+    const handleCreateOrEditProject = async (event: React.FormEvent) => {
         event.preventDefault();
 
         if (projectName && projectDesc) {
-            await projectService.createProject(projectName, projectDesc)
-            setProjectName("")
-            setProjectDesc("")
-            refreshProjectList()
+            if (editProjectId) {
+                await projectService.updateProject(editProjectId, projectName, projectDesc);
+                handleEditProjectNotification();
+            } else {
+                await projectService.createProject(projectName, projectDesc);
+                handleAddProjectNotification();
+            }
+            resetForm();
         }
+    };
+
+    const resetForm = () => {
+        setProjectName("");
+        setProjectDesc("");
+        setEditProjectId(null);
+        refreshProjectList();
     }
 
     const handleEditProject = async (id: string) => {
-        const updName = prompt('Nowa nazwa projektu:');
-        const updDescription = prompt('Nowy opis projektu:');
-
-        if (updName !== null && updDescription !== null) {
-            const updated = await projectService.updateProject(id, updName, updDescription);
-            if (updated) {
-                refreshProjectList();
-            } else {
-                alert('Nie można zaktualizować projektu - projekt o podanym ID nie istnieje.');
-            }
+        const project = projects.find((project) => project.id === id)
+        if (project) {
+            setProjectName(project.name)
+            setProjectDesc(project.desc)
+            setEditProjectId(project.id)
         }
     };
 
@@ -51,6 +60,7 @@ export default function AddProject() {
         const deleted = await projectService.deleteProject(id);
         if (deleted) {
             refreshProjectList();
+            handleDeleteProjectNotification();
         } else {
             alert('Nie można usunąć projektu - projekt o podanym ID nie istnieje.');
         }
@@ -61,9 +71,30 @@ export default function AddProject() {
         navigate(`/projects/${id}/story`);
     };
 
+    const handleAddProjectNotification = () => {
+        addNotification({
+            title: 'Utworzenie projektu',
+            message: 'Poprawnie utworzono projekt!',
+        });
+    };
+
+    const handleEditProjectNotification = () => {
+        addNotification({
+            title: "Edycja projektu",
+            message: "Edycja przebiegła pomyślnie!"
+        });
+    };
+
+    const handleDeleteProjectNotification = () => {
+        addNotification({
+            title: "Usunięcie projektu",
+            message: "Poprawnie usunięto projekt!"
+        })
+    }
+
     return (
         <div className="w-full m-auto justify-center items-center py-12">
-            <form onSubmit={handleCreateProject}>
+            <form onSubmit={handleCreateOrEditProject}>
                 <div className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">Dodaj projekt</div>
                 <div className="lg:w-1/2 md:w-2/3 mx-auto">
                     <div className="flex flex-wrap m-2">
@@ -137,5 +168,5 @@ export default function AddProject() {
                 ))}
             </ul>
         </div>
-    )
+    );
 }
