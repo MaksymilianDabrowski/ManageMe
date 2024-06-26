@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Task } from '../models/TaskModel';
 import { ProjectService } from '../services/ProjectService';
 import { LocalStorageRepository } from '../api/ApiService';
+import { mockUsers } from '@/models/UserModel';
 
 export default function AddTask() {
   const { storyId } = useParams<{ storyId: string }>();
@@ -14,6 +15,7 @@ export default function AddTask() {
   const [taskStatus, setTaskStatus] = useState<"Todo" | "Doing" | "Done">("Todo");
   const [editTaskId, setEditTaskId] = useState<string | null>(null);
   const [storyName, setStoryName] = useState<string>("");
+  const [mockUser, setMockUser] = useState<string>("")
 
   const projectService = new ProjectService(new LocalStorageRepository());
 
@@ -31,7 +33,7 @@ export default function AddTask() {
   const handleCreateOrUpdateTask = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (taskName && taskDesc && taskPriority && taskStatus) {
+    if (taskName && taskDesc && taskPriority && taskStatus && mockUser) {
       if (editTaskId) {
         const update = await projectService.updateTask(
           editTaskId,
@@ -39,6 +41,7 @@ export default function AddTask() {
           taskDesc,
           taskPriority,
           taskStatus,
+          mockUser
         );
         console.log("Task updated:", update);
       } else {
@@ -47,7 +50,8 @@ export default function AddTask() {
           taskDesc,
           taskPriority,
           taskStatus,
-          estTime
+          estTime,
+          mockUser
         );
       }
       resetForm();
@@ -61,6 +65,7 @@ export default function AddTask() {
     setTaskPriority("Medium");
     setTaskStatus("Todo");
     setEstTime(1);
+    setMockUser("")
     setEditTaskId(null);
   };
 
@@ -78,6 +83,7 @@ export default function AddTask() {
       setTaskPriority(task.priority);
       setTaskStatus(task.status);
       setEstTime(task.estTime);
+      setMockUser(task.mockUserId)
       setEditTaskId(task.id);
     }
   };
@@ -86,6 +92,14 @@ export default function AddTask() {
     await projectService.deleteTask(taskId);
     refreshTasks();
   };
+
+  const getMockUserName = (mockUserId: string) => {
+    const user = mockUsers.find((user) => user.id === mockUserId)
+    if (user) {
+      return `${user.firstName} ${user.surname}`
+    }
+    return "No mock user here"
+  }
 
   return (
     <>
@@ -172,6 +186,30 @@ export default function AddTask() {
                   />
                 </div>
               </div>
+              <div className="p-2 w-full">
+                <div className="relative">
+                  <label className="leading-7 text-sm text-[#3d3d3d] dark:text-white">
+                    Przypisany pracownik
+                  </label>
+                  <select
+                    value={mockUser}
+                    onChange={(e) => setMockUser(e.target.value)}
+                    className="w-full text-center bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  >
+                    <option value="">Wybierz pracownika</option>
+                    {mockUsers
+                      .filter(
+                        (user) =>
+                          user.role === "DevOps" || user.role === "Dev"
+                      )
+                      .map((user) => (
+                        <option key={user.id} value={user.id}>
+                          {user.firstName} {user.surname} ({user.role})
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
             </div>
             <div className="p-2 w-full">
               <button
@@ -197,7 +235,7 @@ export default function AddTask() {
         {tasks.map((task) => (
           <li key={task.id}
             className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
-            {task.name} - {task.description} - {task.priority} - {task.status} - {task.estTime}
+            {task.name} - {task.description} - {task.priority} - {task.status} - {task.estTime} - {getMockUserName(task.mockUserId)}
             <button
               onClick={() => handleEditTask(task.id)}
               className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">

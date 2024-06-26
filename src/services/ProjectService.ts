@@ -213,6 +213,7 @@ export class ProjectService {
         priority: "Low" | "Medium" | "High",
         status: "Todo" | "Doing" | "Done",
         estTime: number,
+        mockUserId: string,
     ): Promise<void> {
         try {
             const task: Task = {
@@ -223,6 +224,7 @@ export class ProjectService {
                 storyId: this.getCurrentStory() || "",
                 estTime,
                 status,
+                mockUserId,
             };
             const tasks = await this.apiCaller.getTasks();
             tasks.push(task);
@@ -248,7 +250,8 @@ export class ProjectService {
         updName: string,
         updDesc: string,
         updPriority: "Low" | "Medium" | "High",
-        updStatus: "Todo" | "Doing" | "Done"
+        updStatus: "Todo" | "Doing" | "Done",
+        updMockUser: string,
     ): Promise<boolean> {
         try {
             const tasks = await this.apiCaller.getTasks();
@@ -260,12 +263,13 @@ export class ProjectService {
                     name: updName,
                     description: updDesc,
                     priority: updPriority,
-                    status: updStatus
+                    status: updStatus,
+                    mockUserId: updMockUser,
                 };
                 if (updStatus === "Done") {
                     tasks[index].endTime = new Date();
                 }
-                await this.apiCaller.setTasks(tasks);
+                this.apiCaller.setTasks(tasks);
                 return true;
             }
             return false;

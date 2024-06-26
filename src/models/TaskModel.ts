@@ -1,5 +1,3 @@
-import { User } from "./UserModel";
-
 export interface Task {
     id: string,
     name: string,
@@ -11,5 +9,5 @@ export interface Task {
     // buildTime: Date,
     startTime?: Date,
     endTime?: Date,
-    user?: User
+    mockUserId: string,
 }
