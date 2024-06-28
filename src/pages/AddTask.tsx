@@ -36,7 +36,7 @@ export default function AddTask() {
 
     if (taskName && taskDesc && taskPriority && taskStatus && mockUser) {
       if (editTaskId) {
-        const update = await projectService.updateTask(
+        const updated = await projectService.updateTask(
           editTaskId,
           taskName,
           taskDesc,
@@ -44,8 +44,7 @@ export default function AddTask() {
           taskStatus,
           mockUser
         );
-        console.log("Task updated:", update);
-        if (update) {
+        if (updated) {
           handleEditTaskNotification();
         }
       } else {
@@ -57,10 +56,10 @@ export default function AddTask() {
           estTime,
           mockUser
         );
+        handleAddTaskNotification();
       }
       resetForm();
       refreshTasks();
-      handleAddTaskNotification();
     }
   };
 
@@ -127,6 +126,11 @@ export default function AddTask() {
       message: "Poprawnie usunięto taska!"
     });
   };
+
+  // Taks filter
+  const todoTasks = tasks.filter(task => task.status === "Todo");
+  const doingTasks = tasks.filter(task => task.status === "Doing");
+  const doneTasks = tasks.filter(task => task.status === "Done");
 
   return (
     <>
@@ -219,6 +223,7 @@ export default function AddTask() {
                     Przypisany pracownik
                   </label>
                   <select
+                    required
                     value={mockUser}
                     onChange={(e) => setMockUser(e.target.value)}
                     className="w-full text-center bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
@@ -255,27 +260,93 @@ export default function AddTask() {
           </div>
         </form>
       </div>
-      <ul>
-        <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">
-          Wybrane story: {storyName}
-        </h1>
-        {tasks.map((task) => (
-          <li key={task.id}
-            className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
-            {task.name} - {task.description} - {task.priority} - {task.status} - {task.estTime} - {getMockUserName(task.mockUserId)}
-            <button
-              onClick={() => handleEditTask(task.id)}
-              className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-              Edytuj task
-            </button>
-            <button
-              onClick={() => handleDeleteTask(task.id)}
-              className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
-              Usuń task
-            </button>
-          </li>
-        ))}
-      </ul>
+
+      <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">
+        Wybrane story: {storyName}
+      </h1>
+
+      <div className="flex flex-wrap">
+        <div className="w-full md:w-1/3 p-4">
+          <h2 className="text-2xl font-bold text-center text-[#2c2c2c] mb-4 dark:text-white">
+            Todo
+          </h2>
+          <ul>
+            {todoTasks.map((task) => (
+              <li key={task.id} className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
+                {task.name} <br />
+                {task.description} <br />
+                {task.priority} <br />
+                {`${task.estTime} godz.`} <br />
+                {getMockUserName(task.mockUserId)}
+                <button
+                  onClick={() => handleEditTask(task.id)}
+                  className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                  Edytuj task
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(task.id)}
+                  className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                  Usuń task
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="w-full md:w-1/3 p-4">
+          <h2 className="text-2xl font-bold text-center text-[#2c2c2c] mb-4 dark:text-white">
+            Doing
+          </h2>
+          <ul>
+            {doingTasks.map((task) => (
+              <li key={task.id} className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
+                {task.name} <br />
+                {task.description} <br />
+                {task.priority} <br />
+                {`${task.estTime} godz.`} <br />
+                {getMockUserName(task.mockUserId)}
+                <button
+                  onClick={() => handleEditTask(task.id)}
+                  className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                  Edytuj task
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(task.id)}
+                  className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                  Usuń task
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="w-full md:w-1/3 p-4">
+          <h2 className="text-2xl font-bold text-center text-[#2c2c2c] mb-4 dark:text-white">
+            Done
+          </h2>
+          <ul>
+            {doneTasks.map((task) => (
+              <li key={task.id} className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
+                {task.name} <br />
+                {task.description} <br />
+                {task.priority} <br />
+                {`${task.estTime} godz.`} <br />
+                {getMockUserName(task.mockUserId)}
+                <button
+                  onClick={() => handleEditTask(task.id)}
+                  className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                  Edytuj task
+                </button>
+                <button
+                  onClick={() => handleDeleteTask(task.id)}
+                  className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                  Usuń task
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </>
   );
 }

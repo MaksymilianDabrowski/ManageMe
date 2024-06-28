@@ -6,7 +6,6 @@ export interface Task {
     storyId: string,
     estTime: number,
     status: "Todo" | "Doing" | "Done",
-    // buildTime: Date,
     startTime?: Date,
     endTime?: Date,
     mockUserId: string,

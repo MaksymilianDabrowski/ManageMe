@@ -52,12 +52,11 @@ export default function AddStory() {
           storyStatus,
           currentUser?.id || ""
         );
-        handleAddStoryNotification();
       }
       resetForm();
+      handleAddStoryNotification();
     }
   };
-
 
   const resetForm = () => {
     setStoryName("");
@@ -66,7 +65,7 @@ export default function AddStory() {
     setStoryStatus("Todo");
     setEditStoryId(null);
     refreshStoryList();
-  }
+  };
 
   const handleEditStory = async (id: string) => {
     const story = stories.find((story) => story.id === id);
@@ -120,6 +119,11 @@ export default function AddStory() {
       message: "Poprawnie usunięto story!"
     });
   };
+
+  // Task filter
+  const todoStories = stories.filter(story => story.status === "Todo");
+  const doingStories = stories.filter(story => story.status === "Doing");
+  const doneStories = stories.filter(story => story.status === "Done");
 
   return (
     <>
@@ -207,32 +211,105 @@ export default function AddStory() {
             </div>
           </div>
         </form>
-        <ul>
-          <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">
-            Wybrany projekt: {projectName}
-          </h1>
-          {stories.map((story) => (
-            <li key={story.id}
-              className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
-              {story.name} - {story.description} - {story.priority} - {story.status}
-              <button
-                onClick={() => handleOpenStory(story.id)}
-                className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-                Otwórz
-              </button>
-              <button
-                onClick={() => handleEditStory(story.id)}
-                className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
-                Edytuj
-              </button>
-              <button
-                onClick={() => handleDeleteStory(story.id)}
-                className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
-                Usuń
-              </button>
-            </li>
-          ))}
-        </ul>
+
+        <h1 className="text-4xl font-bold text-center text-[#2c2c2c] mb-8 dark:text-white">
+          Wybrany projekt: {projectName}
+        </h1>
+
+        <div className="flex flex-wrap">
+          <div className="w-full md:w-1/3 p-4">
+            <h2 className="text-2xl font-bold text-center text-[#2c2c2c] mb-4 dark:text-white">
+              Todo
+            </h2>
+            <ul>
+              {todoStories.map((story) => (
+                <li key={story.id} className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
+                  {story.name} <br />
+                  {story.description} <br />
+                  {story.priority} <br />
+                  {story.status} <br />
+                  <button
+                    onClick={() => handleOpenStory(story.id)}
+                    className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                    Otwórz
+                  </button>
+                  <button
+                    onClick={() => handleEditStory(story.id)}
+                    className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                    Edytuj
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStory(story.id)}
+                    className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                    Usuń
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="w-full md:w-1/3 p-4">
+            <h2 className="text-2xl font-bold text-center text-[#2c2c2c] mb-4 dark:text-white">
+              Doing
+            </h2>
+            <ul>
+              {doingStories.map((story) => (
+                <li key={story.id} className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
+                  {story.name} <br />
+                  {story.description} <br />
+                  {story.priority} <br />
+                  {story.status} <br />
+                  <button
+                    onClick={() => handleOpenStory(story.id)}
+                    className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                    Otwórz
+                  </button>
+                  <button
+                    onClick={() => handleEditStory(story.id)}
+                    className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                    Edytuj
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStory(story.id)}
+                    className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                    Usuń
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="w-full md:w-1/3 p-4">
+            <h2 className="text-2xl font-bold text-center text-[#2c2c2c] mb-4 dark:text-white">
+              Done
+            </h2>
+            <ul>
+              {doneStories.map((story) => (
+                <li key={story.id} className="text-[#2c2c2c] text-4xl border-4 mb-16 p-6 dark:text-white">
+                  {story.name} <br />
+                  {story.description} <br />
+                  {story.priority} <br />
+                  {story.status} <br />
+                  <button
+                    onClick={() => handleOpenStory(story.id)}
+                    className="flex mx-auto text-white bg-gray-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                    Otwórz
+                  </button>
+                  <button
+                    onClick={() => handleEditStory(story.id)}
+                    className="flex mx-auto text-white bg-yellow-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg mt-4 mb-4">
+                    Edytuj
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStory(story.id)}
+                    className="flex mx-auto text-white bg-red-600 border-0 py-2 px-8 focus:outline-none hover:scale-110 ease-in duration-300 rounded-2xl text-lg">
+                    Usuń
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </>
   );
